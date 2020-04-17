@@ -1,6 +1,5 @@
-import XCTest
-
 import KeanuTests
+import XCTest
 
 var tests = [XCTestCaseEntry]()
 tests += KeanuTests.allTests()
