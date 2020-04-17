@@ -1,6 +1,2 @@
-import KeanuTests
-import XCTest
-
-var tests = [XCTestCaseEntry]()
-tests += KeanuTests.allTests()
-XCTMain(tests)
+// Adapted from https://oleb.net/2020/swift-test-discovery/
+fatalError("Run the tests with `swift test --enable-test-discovery`.")

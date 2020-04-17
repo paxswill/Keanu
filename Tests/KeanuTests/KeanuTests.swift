@@ -8,8 +8,4 @@ final class KeanuTests: XCTestCase {
         // results.
         XCTAssertEqual(Keanu().text, "Hello, World!")
     }
-
-    static var allTests = [
-        ("testExample", testExample),
-    ]
 }
