@@ -1,11 +1,14 @@
+// I would like to put this within the Matrix class, but it is not a
+// generic type, so it's easier to use it when it's outside.
+public enum Order {
+    case rowMajor
+    case columnMajor
+}
+
 public class Matrix<T>: ExpressibleByArrayLiteral {
     public typealias Element = T
     public typealias Index = Int
-    
-    public enum Order {
-        case rowMajor
-        case columnMajor
-    }
+
     
     public let rowCount: Index
     public let columnCount: Index

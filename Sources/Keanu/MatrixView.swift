@@ -2,10 +2,10 @@ public class MatrixView<T> {
     public typealias Element = T
     public typealias Index = Int
     public private(set) var matrix: Matrix<T>
-    private let viewType: Matrix<Element>.Order
+    private let viewType: Order
     private let orderIndex: Index
     
-    fileprivate init(_ matrix: Matrix<Element>, order: Matrix<Element>.Order, index: Index) {
+    fileprivate init(_ matrix: Matrix<Element>, order: Order, index: Index) {
         self.matrix = matrix
         self.viewType = order
         orderIndex = index
