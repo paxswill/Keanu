@@ -4,7 +4,7 @@ public class MatrixView<T> {
     public private(set) var matrix: Matrix<T>
     private let viewType: Order
     private let orderIndex: Index
-    
+
     fileprivate init(_ matrix: Matrix<Element>, order: Order, index: Index) {
         self.matrix = matrix
         self.viewType = order
@@ -28,7 +28,7 @@ extension MatrixView: MutableCollection {
     public var startIndex: Index {
         return Index(0)
     }
-    
+
     public var endIndex: Index {
         switch viewType {
         case .rowMajor:
@@ -37,11 +37,11 @@ extension MatrixView: MutableCollection {
             return matrix.rowCount
         }
     }
-    
+
     public func index(after i: Index) -> Index {
         return i + 1
     }
-    
+
     public subscript(index: Index) -> Element {
         get {
             switch viewType {
@@ -72,4 +72,3 @@ extension MatrixView: Equatable where Element: Hashable {
         self.forEach { hasher.combine($0) }
     }
 }
-

@@ -9,23 +9,24 @@ public class Matrix<T>: ExpressibleByArrayLiteral {
     public typealias Element = T
     public typealias Index = Int
 
-    
     public let rowCount: Index
     public let columnCount: Index
     public private(set) var order: Order
     @usableFromInline internal var storage: ContiguousArray<Element> = []
-    
+
     // MARK: Initializers
-    
+
     public init(rows: Index, columns: Index, initialValue: Element, order: Order = .rowMajor) {
         rowCount = rows
         columnCount = columns
         self.order = order
         storage = ContiguousArray(repeating: initialValue, count: rows * columns)
     }
-    
+
     // TODO: genericize the elementArrays argument
-    public init(_ elementArrays: [[Element]], sourceOrder: Order = .rowMajor, order: Order = .rowMajor) {
+    public init(
+        _ elementArrays: [[Element]], sourceOrder: Order = .rowMajor, order: Order = .rowMajor
+    ) {
         switch sourceOrder {
         case .rowMajor:
             rowCount = elementArrays.count
@@ -57,27 +58,27 @@ public class Matrix<T>: ExpressibleByArrayLiteral {
             }
         }
     }
-    
+
     required public convenience init(arrayLiteral: [Element]...) {
         self.init(arrayLiteral)
     }
-    
+
     // MARK: Aggregate access
-    
+
     public var count: Int {
         return storage.count
     }
-    
+
     // MARK: Element Access
-    
+
     public func row(_ rowIndex: Index) -> RowView<Element> {
         return RowView(self, index: rowIndex)
     }
-    
+
     public func column(_ columnIndex: Index) -> ColumnView<Element> {
         return ColumnView(self, index: columnIndex)
     }
-    
+
     @inlinable internal func indexFor(row: Index, column: Index) -> Index {
         switch order {
         case .rowMajor:
@@ -86,15 +87,15 @@ public class Matrix<T>: ExpressibleByArrayLiteral {
             return row + column * rowCount
         }
     }
-    
+
     @inlinable public func getElement(row: Index, column: Index) -> Element {
         return storage[indexFor(row: row, column: column)]
     }
-    
+
     @inlinable public func setElement(_ element: Element, row: Index, column: Index) {
         storage[indexFor(row: row, column: column)] = element
     }
-    
+
     subscript(row: Index, column: Index) -> Element {
         get {
             return getElement(row: row, column: column)
@@ -132,4 +133,3 @@ extension Matrix: Equatable where Element: Hashable {
         self.forEach { hasher.combine($0) }
     }
 }
-
