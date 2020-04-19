@@ -68,7 +68,7 @@ class ElementAccessTestsCommon: XCTestCase {
     func testSetElement() {
         let expected = expectedRowMajor.map { $0 * 2 }
         var expectedIterator = expected.makeIterator()
-        let matrix = self.matrix()
+        var matrix = self.matrix()
         for rowIndex in 0..<matrix.rowCount {
             for columnIndex in 0..<matrix.columnCount {
                 matrix.setElement(expectedIterator.next()!, row: rowIndex, column: columnIndex)
@@ -88,7 +88,7 @@ class ElementAccessTestsCommon: XCTestCase {
     func testSetSubscript() {
         let expected = expectedRowMajor.map { $0 * 2 }
         var expectedIterator = expected.makeIterator()
-        let matrix = self.matrix()
+        var matrix = self.matrix()
         for rowIndex in 0..<matrix.rowCount {
             for columnIndex in 0..<matrix.columnCount {
                 matrix[rowIndex, columnIndex] = expectedIterator.next()!
