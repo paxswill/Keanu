@@ -60,16 +60,6 @@ public protocol MatrixProtocol: Collection, ExpressibleByArrayLiteral where Inde
 }
 
 extension MatrixProtocol {
-    /// Access elements in the matrix with a *row*, *column* subscript.
-    public subscript(row: Int, column: Int) -> Element {
-        return getElement(row: row, column: column)
-    }
-
-    /// Access elements in the matrix by (row, column) tuple.
-    public subscript(index: Index) -> Element {
-        return getElement(row: index.row, column: index.column)
-    }
-
     /// The first index in the collection.
     public var startIndex: Index {
         MatrixIndex(0, 0)
@@ -86,6 +76,16 @@ extension MatrixProtocol {
     /// The total number of elements in the matrix.
     public var count: Int {
         return rowCount * columnCount
+    }
+
+    /// Access elements in the matrix with a *row*, *column* subscript.
+    public subscript(row: Int, column: Int) -> Element {
+        return getElement(row: row, column: column)
+    }
+
+    /// Access elements in the matrix by (row, column) tuple.
+    public subscript(index: Index) -> Element {
+        return getElement(row: index.row, column: index.column)
     }
 
     /// Return the index immediately after the given index, in row-major order.
