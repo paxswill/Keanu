@@ -181,13 +181,35 @@ extension Matrix where Element: AdditiveArithmetic {
     }
 }
 
-extension Matrix: Equatable where Element: Hashable {
-    /// Retursn whether or not two matrices are equal based on each element.
+extension Matrix: Equatable where Element: Equatable {
+    /// Returns whether or not two matrices are equal based on each element.
     public static func == (lhs: Matrix<Element>, rhs: Matrix<Element>) -> Bool {
-        // NOTE: possible vectorization point
-        return lhs.count == rhs.count && zip(lhs, rhs).allSatisfy { $0 == $1 }
+        // NOTE: This function can probably be vectorized
+        // Checking both counts also transitively checks the full count
+        if lhs.rowCount != rhs.rowCount || lhs.columnCount != rhs.columnCount {
+            return false
+        } else if lhs.order == rhs.order {
+            // If they have the same ordering, we can just compare the
+            // iterator outputs
+            return lhs.count == rhs.count && zip(lhs, rhs).allSatisfy { $0 == $1 }
+        } else {
+            // Since the order is different, we can either transpose one
+            // of them and then compare the iterators, or we can compare
+            // each element individually.
+            // TODO: once a transpose method is added, use that
+            for row in 0..<lhs.rowCount {
+                for column in 0..<rhs.columnCount {
+                    if lhs[row, column] != rhs[row, column] {
+                        return false
+                    }
+                }
+            }
+            return true
+        }
     }
+}
 
+extension Matrix: Hashable where Element: Hashable {
     /// Allow matrices to be hashed on their values.
     ///
     /// The hash value *does* depend on the `order` of the matrix.
@@ -195,6 +217,19 @@ extension Matrix: Equatable where Element: Hashable {
     /// - Parameter hasher: The Hasher instance used to calculate the hash.
     // The parameter docstring is to get swift-format to shut up.
     public func hash(into hasher: inout Hasher) {
-        self.forEach { hasher.combine($0) }
+        hasher.combine(rowCount)
+        hasher.combine(columnCount)
+        // Using rowMajor for the order the items are added to the hasher as
+        // it's the default order.
+        switch order {
+        case .rowMajor:
+            forEach { hasher.combine($0) }
+        case .columnMajor:
+            for row in 0..<rowCount {
+                for column in 0..<columnCount {
+                    hasher.combine(self[row, column])
+                }
+            }
+        }
     }
 }
