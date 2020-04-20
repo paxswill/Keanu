@@ -8,7 +8,8 @@ public protocol MatrixProtocol:
 where
     Index == MatrixIndex,
     RowView.Element == Element,
-    ColumnView.Element == Element
+    ColumnView.Element == Element,
+    ArrayLiteralElement == [Element]
 {
     /// The type of elements contained within this matrix.
     associatedtype Element
@@ -59,10 +60,8 @@ where
 
     /// Create a new matrix with an array literal.
     ///
-    /// The given array literal must be a row-major representation, and the
-    /// resulting Matrix will also be stored in a row-major format. If you need
-    /// control over those defaults, the `init(_:, sourceOrder:, order:)`
-    /// initializer is a better choice.
+    /// The given array literals must be a row-major representation (in other words, an array
+    /// of arrrays, with the inner arrays representing individual rows in the matrix).
     ///
     /// - Parameter arrayLiteral: a variadic argument of arrays of Elements.
     init(arrayLiteral: [Element]...)
