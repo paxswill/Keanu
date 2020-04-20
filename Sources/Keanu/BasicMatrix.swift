@@ -137,3 +137,4 @@ public struct BasicMatrix<T>: MutableMatrixProtocol, ContiguousMatrixProtocol {
 
 extension BasicMatrix: Equatable where Element: Equatable {}
 extension BasicMatrix: Hashable where Element: Hashable {}
+extension BasicMatrix: MatrixOperations where Element: Numeric {}
