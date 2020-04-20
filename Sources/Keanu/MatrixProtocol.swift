@@ -18,6 +18,27 @@ public protocol MatrixProtocol: Collection, ExpressibleByArrayLiteral where Inde
     /// The total number of elements in the matrix.
     var count: Int { get }
 
+    /// A boolean for if the matrix is empty or not.
+    var isEmpty: Bool { get }
+
+    /// A boolean for if the matrix is square (same number of rows and columns).
+    var isSquare: Bool { get }
+
+    /// A boolean for if the matrix is a vector (there is either only one row
+    /// or one column).
+    var isVector: Bool { get }
+
+    /// A boolean for if there is only one element in the matrix.
+    var isScalar: Bool { get }
+
+    /// If the matrix is a vector (`isVector` is true), this property will
+    /// return an array of that vector.
+    var vector: [Element]? { get }
+
+    /// If the matrix is a scalar (`isScalar` is true), this property will
+    /// return the single value in the matrix.
+    var scalar: Element? { get }
+
     /// Initialize a matrix with a single repeated value.
     init(rows: Int, columns: Int, initialValue: Element)
 
@@ -59,7 +80,7 @@ public protocol MatrixProtocol: Collection, ExpressibleByArrayLiteral where Inde
     subscript(index: Index) -> Element { get }
 }
 
-extension MatrixProtocol {
+extension MatrixProtocol where RowView.Element == Element, ColumnView.Element == Element {
     /// The first index in the collection.
     public var startIndex: Index {
         MatrixIndex(0, 0)
@@ -76,6 +97,41 @@ extension MatrixProtocol {
     /// The total number of elements in the matrix.
     public var count: Int {
         return rowCount * columnCount
+    }
+
+    /// A boolean for if the matrix is empty or not.
+    public var isEmpty: Bool { count == 0 }
+
+    /// A boolean for if the matrix is square (same number of rows and columns).
+    public var isSquare: Bool { rowCount == columnCount }
+
+    /// A boolean for if the matrix is a vector (there is either only one row
+    /// or one column).
+    public var isVector: Bool { rowCount == 1 || columnCount == 1 }
+
+    /// A boolean for if there is only one element in the matrix.
+    public var isScalar: Bool { count == 1 }
+
+    /// If the matrix is a vector, this property will return an array of that
+    /// vector.
+    public var vector: [Element]? {
+        guard isVector else {
+            return nil
+        }
+        if rowCount == 1 {
+            return Array(row(0))
+        } else {
+            return Array(column(0))
+        }
+    }
+
+    /// If the matrix is a scalar (`isScalar` is true), this property will
+    /// return the single value in the matrix.
+    public var scalar: Element? {
+        guard isScalar else {
+            return nil
+        }
+        return self[0, 0]
     }
 
     /// Access elements in the matrix with a *row*, *column* subscript.
