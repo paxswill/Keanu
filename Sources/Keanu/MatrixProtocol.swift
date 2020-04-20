@@ -163,6 +163,21 @@ extension MatrixProtocol where Element: AdditiveArithmetic {
     }
 }
 
+// AdditiveArithmetic (for .zero) and ExpressibleByIntegerLiteral (for
+// type casting `1`). The closest standard library protocol for this is Numeric,
+// but this is a bit more precise.
+extension MatrixProtocol where Element: AdditiveArithmetic & ExpressibleByIntegerLiteral {
+    /// Generate the identity matrix with the given dimensions.
+    public static func identityMatrix(size: Int) -> Self {
+        let arrays: [[Element]] = (0..<size).map {
+            var array = Array(repeating: Element.zero, count: size)
+            array[$0] = 1 as Element
+            return array
+        }
+        return Self(arrays)
+    }
+}
+
 extension MatrixProtocol where Self.Element: Equatable {
     /// Returns whether or not two matrices are equal based on each element.
     public static func == (lhs: Self, rhs: Self) -> Bool {
