@@ -9,8 +9,9 @@ if [ "x" = "x${SRCROOT}" ]; then
     unset _OLD_DIR
 fi
 "${SRCROOT}/BuildTools/run-swift-format.sh" \
-    lint \
+    format \
 	--configuration "${SRCROOT}/.swift-format" \
+	-i \
     -r \
     "$SRCROOT"/Sources \
     "$SRCROOT"/Tests \
