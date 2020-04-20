@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Keanu
 
 // I tried arranging the common tests as protocols with default implementations

@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Keanu
 
 fileprivate typealias Element = Int

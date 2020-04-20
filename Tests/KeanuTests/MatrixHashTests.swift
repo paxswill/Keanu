@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Keanu
 
 fileprivate func hashOf<T: Hashable>(_ value: T) -> Int {

@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Keanu
 
 class ViewTestsCommon: XCTestCase {
