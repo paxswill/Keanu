@@ -1,9 +1,9 @@
 import XCTest
 @testable import Keanu
 
-final class MatrixEqualityTests: XCTestCase {
-    typealias Element = Int
+fileprivate typealias Element = Int
 
+final class MatrixEqualityTests: XCTestCase {
     func testEmptyEqual() {
         let m1 = [[]] as Matrix<Element>
         let m2 = [[]] as Matrix<Element>
@@ -60,5 +60,27 @@ final class MatrixEqualityTests: XCTestCase {
             order: .columnMajor
         )
         XCTAssertNotEqual(m1, m2)
+    }
+}
+
+final class MatrixViewEqualityTests: XCTestCase {
+    func testRowIsEqual() {
+        let m = [[1, 2, 3], [4, 5, 6], [1, 2, 3]] as Matrix<Element>
+        XCTAssertEqual(m.row(0), m.row(2))
+    }
+
+    func testRowIsNotEqual() {
+        let m = [[1, 2, 3], [4, 5, 6], [1, 2, 3]] as Matrix<Element>
+        XCTAssertNotEqual(m.row(0), m.row(1))
+    }
+
+    func testColumnIsEqual() {
+        let m = [[1, 2, 1], [3, 5, 3], [1, 2, 1]] as Matrix<Element>
+        XCTAssertEqual(m.column(0), m.column(2))
+    }
+
+    func testColumnIsNotEqual() {
+        let m = [[1, 2, 1], [3, 5, 3], [1, 2, 1]] as Matrix<Element>
+        XCTAssertNotEqual(m.column(0), m.column(1))
     }
 }

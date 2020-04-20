@@ -69,8 +69,6 @@ extension RowViewProtocol {
     }
 }
 
-//public typealias MutableRowViewProtocol = RowViewProtocol & MutableMatrixViewProtocol
-
 /// A view over a single row in a mutable matrix.
 public protocol MutableRowViewProtocol: RowViewProtocol, MutableMatrixViewProtocol {
     var matrix: SourceMatrix { get set }
@@ -115,8 +113,6 @@ extension ColumnViewProtocol {
         return matrix[rowIndex, sourceIndex]
     }
 }
-
-//public typealias MutableColumnViewProtocol = ColumnViewProtocol & MutableMatrixViewProtocol
 
 /// A view over a single column in a mutable matrix.
 public protocol MutableColumnViewProtocol: ColumnViewProtocol, MutableMatrixViewProtocol {
