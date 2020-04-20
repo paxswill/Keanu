@@ -2,7 +2,14 @@
 ///
 /// All indexes start from 0. The dimensions of the matrix are immutable, but
 /// each element's value *is* mutable.
-public protocol MatrixProtocol: Collection, ExpressibleByArrayLiteral where Index == MatrixIndex {
+public protocol MatrixProtocol:
+    Collection,
+    ExpressibleByArrayLiteral
+where
+    Index == MatrixIndex,
+    RowView.Element == Element,
+    ColumnView.Element == Element
+{
     /// The type of elements contained within this matrix.
     associatedtype Element
 
