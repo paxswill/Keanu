@@ -11,11 +11,11 @@ where
     RowView: VectorOperations,
     ColumnView: VectorOperations
 {
-    static func ++ (_: Self, _: Self) -> Self
-    static func ++ (matrix: Self, scalar: Element) -> Self
-    static func ++ (scalar: Element, matrix: Self) -> Self
-    static func -- (lhs: Self, rhs: Self) -> Self
-    static func -- (matrix: Self, scalar: Element) -> Self
+    static func .+ (_: Self, _: Self) -> Self
+    static func .+ (matrix: Self, scalar: Element) -> Self
+    static func .+ (scalar: Element, matrix: Self) -> Self
+    static func .- (lhs: Self, rhs: Self) -> Self
+    static func .- (matrix: Self, scalar: Element) -> Self
     func dot(_ other: Self) -> Element
     func dot<T: Collection>(_ other: T) -> Element where T.Element == Element
 
@@ -23,9 +23,9 @@ where
 
 extension MatrixOperations where Element: AdditiveArithmetic {
     /// Add two matrices together element-wise, returning the results.
-    public static func ++ (lhs: Self, rhs: Self) -> Self {
         assert(lhs.rowCount == rhs.rowCount)
         assert(lhs.columnCount == rhs.columnCount)
+    public static func .+ (lhs: Self, rhs: Self) -> Self {
         let summed: [Element] = zip(lhs, rhs).map(+)
         let rows: [[Element]] = stride(from: 0, to: summed.count, by: lhs.rowCount).map {
             Array(summed[$0..<($0 + lhs.rowCount)])
@@ -34,7 +34,7 @@ extension MatrixOperations where Element: AdditiveArithmetic {
     }
 
     /// Add a scalar to each element in the matrix, returning the results.
-    public static func ++ (matrix: Self, scalar: Element) -> Self {
+    public static func .+ (matrix: Self, scalar: Element) -> Self {
         let summed: [Element] = matrix.map { $0 + scalar }
         let rows: [[Element]] = stride(from: 0, to: summed.count, by: matrix.rowCount).map {
             Array(summed[$0..<($0 + matrix.rowCount)])
@@ -43,14 +43,14 @@ extension MatrixOperations where Element: AdditiveArithmetic {
     }
 
     /// Add a scalar to each element in the matrix, returning the individual results.
-    public static func ++ (scalar: Element, matrix: Self) -> Self {
-        return matrix ++ scalar
+    public static func .+ (scalar: Element, matrix: Self) -> Self {
+        return matrix .+ scalar
     }
 
     /// Subtract two matrices element-wise, returning the results.
-    public static func -- (lhs: Self, rhs: Self) -> Self {
         assert(lhs.rowCount == rhs.rowCount)
         assert(lhs.columnCount == rhs.columnCount)
+    public static func .- (lhs: Self, rhs: Self) -> Self {
         let difference: [Element] = zip(lhs, rhs).map(-)
         let rows: [[Element]] = stride(from: 0, to: difference.count, by: lhs.rowCount).map {
             Array(difference[$0..<($0 + lhs.rowCount)])
@@ -59,7 +59,7 @@ extension MatrixOperations where Element: AdditiveArithmetic {
     }
 
     /// Subtract a scalar from each element in the matrix, returning the results.
-    public static func -- (matrix: Self, scalar: Element) -> Self {
+    public static func .- (matrix: Self, scalar: Element) -> Self {
         let difference: [Element] = matrix.map { $0 - scalar }
         let rows: [[Element]] = stride(from: 0, to: difference.count, by: matrix.rowCount).map {
             Array(difference[$0..<($0 + matrix.rowCount)])
