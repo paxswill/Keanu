@@ -26,9 +26,9 @@ where
 
 extension MatrixOperations where Element: AdditiveArithmetic {
     /// Add two matrices together element-wise, returning the results.
-        assert(lhs.rowCount == rhs.rowCount)
-        assert(lhs.columnCount == rhs.columnCount)
     public static func .+ (lhs: Self, rhs: Self) -> Self {
+        precondition(lhs.rowCount == rhs.rowCount)
+        precondition(lhs.columnCount == rhs.columnCount)
         let summed: [Element] = zip(lhs, rhs).map(+)
         let rows: [[Element]] = stride(from: 0, to: summed.count, by: lhs.rowCount).map {
             Array(summed[$0..<($0 + lhs.rowCount)])
@@ -51,9 +51,9 @@ extension MatrixOperations where Element: AdditiveArithmetic {
     }
 
     /// Subtract two matrices element-wise, returning the results.
-        assert(lhs.rowCount == rhs.rowCount)
-        assert(lhs.columnCount == rhs.columnCount)
     public static func .- (lhs: Self, rhs: Self) -> Self {
+        precondition(lhs.rowCount == rhs.rowCount)
+        precondition(lhs.columnCount == rhs.columnCount)
         let difference: [Element] = zip(lhs, rhs).map(-)
         let rows: [[Element]] = stride(from: 0, to: difference.count, by: lhs.rowCount).map {
             Array(difference[$0..<($0 + lhs.rowCount)])
@@ -100,9 +100,9 @@ extension MatrixOperations where Element: AdditiveArithmetic {
     }
     /// Return the dot product of two matrices that are vectors.
     public func dot(_ other: Self) -> Element {
-        assert(isVector)
-        assert(other.isVector)
-        assert(count == other.count)
+        precondition(isVector)
+        precondition(other.isVector)
+        precondition(count == other.count)
         let products = zip(self, other).map(*)
         // TODO: use a better algorithm for summation like Kahan's
         return products.reduce(Element.zero, +)
@@ -110,8 +110,8 @@ extension MatrixOperations where Element: AdditiveArithmetic {
 
     /// Return the dot product of this matrix and an array of elements.
     public func dot<T: Collection>(_ other: T) -> Element where T.Element == Element {
-        assert(isVector)
-        assert(count == other.count)
+        precondition(isVector)
+        precondition(count == other.count)
         let products = zip(self, other).map(*)
         // TODO: use a better algorithm for summation like Kahan's
         return products.reduce(Element.zero, +)

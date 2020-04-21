@@ -15,7 +15,7 @@ extension VectorOperations {
     /// Add the elements from two views together, returning the results.
     public static func .+ <T: Collection>(lhs: Self, rhs: T) -> [Element]
     where T.Element == Element {
-        assert(lhs.count == rhs.count)
+        precondition(lhs.count == rhs.count)
         return zip(lhs, rhs).map(+)
     }
 
@@ -32,7 +32,7 @@ extension VectorOperations {
     /// Subtract each element of the second view from the first, returning results.
     public static func .- <T: Collection>(lhs: Self, rhs: T) -> [Element]
     where T.Element == Element {
-        assert(lhs.count == rhs.count)
+        precondition(lhs.count == rhs.count)
         return zip(lhs, rhs).map(-)
     }
 
