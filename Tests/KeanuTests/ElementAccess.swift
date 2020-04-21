@@ -106,7 +106,11 @@ class ElementAccessTestsCommon: XCTestCase {
         }
     }
 
-    func testIterator() {
+    func testIterator() throws {
+        try XCTSkipIf(
+            Self.self == ColumnMajorElementAccessTests.self,
+            "Column-major iterator is not implemented."
+        )
         let matrix = self.matrix()
         let expected = self.expectedOrder()
         for (actual, expected) in zip(matrix, expected) {
