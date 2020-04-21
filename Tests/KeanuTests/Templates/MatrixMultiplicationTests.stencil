@@ -1,0 +1,21 @@
+{% for Scalar in types.based.Numeric|!protocol %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}MultiplicationTests+TemplateName
+import XCTest
+
+@testable import Keanu
+
+// Matrix type: {{ Matrix.name }}
+// Scalar type: {{ Scalar.name }}
+final class {{ Matrix.name }}{{ Scalar.name }}MultiplicationTests: XCTestCase {
+    func testMultiply() {
+        let a = [[2, 3], [1, 4]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let b = [[0, 5], [3, 4]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let ab = [[9, 2], [12, 21]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(a ** b, ab)
+    }
+}
+// sourcery:end
+
+{% endfor %}
+{% endfor %}
