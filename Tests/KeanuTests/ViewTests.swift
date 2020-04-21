@@ -5,18 +5,6 @@ import XCTest
 class ViewTestsCommon: XCTestCase {
     typealias Element = Int
     var matrix: Matrix<Element> = [[1, 2, 3], [4, 5, 6]]
-
-    func maxIndex() -> Int {
-        fatalError()
-    }
-
-    override func invokeTest() {
-        if Self.self == ViewTestsCommon.self {
-            return
-        } else {
-            return super.invokeTest()
-        }
-    }
 }
 
 final class RowViewTests: ViewTestsCommon {
@@ -24,11 +12,11 @@ final class RowViewTests: ViewTestsCommon {
         return matrix.row(index)
     }
 
-    override func maxIndex() -> Int {
+    func maxIndex() -> Int {
         return matrix.rowCount
     }
 
-    func testViewAccess() throws {
+    func testViewAccess() {
         let maxIndex = self.maxIndex()
         for index in 0..<maxIndex {
             let view = self.view(index)
@@ -42,15 +30,16 @@ final class ColumnViewTests: ViewTestsCommon {
         return matrix.column(index)
     }
 
-    override func maxIndex() -> Int {
+    func maxIndex() -> Int {
         return matrix.columnCount
     }
 
-    func testViewAccess() throws {
+    func testViewAccess() {
         let maxIndex = self.maxIndex()
         for index in 0..<maxIndex {
             let view = self.view(index)
             XCTAssertEqual(view.matrix, matrix)
         }
     }
+
 }
