@@ -5,6 +5,9 @@ public protocol VectorOperations: Collection where Element: Numeric {
     static func .+ (scalar: Element, vector: Self) -> [Element]
     static func .- <T: Collection>(lhs: Self, rhs: T) -> [Element] where T.Element == Element
     static func .- (vector: Self, scalar: Element) -> [Element]
+    static func .* (lhs: Self, rhs: Self) -> [Element]
+    static func .* (vector: Self, scalar: Element) -> [Element]
+    static func .* (scalar: Element, vector: Self) -> [Element]
     func dot<T: Collection>(_ other: T) -> Element where T.Element == Element
 }
 
@@ -36,6 +39,22 @@ extension VectorOperations {
     /// Subtract a scalar from each element of a view, returning the results.
     public static func .- (vector: Self, scalar: Element) -> [Element] {
         return vector.map { $0 - scalar }
+    }
+
+    /// Return the results of multiplying each corresponding element of each operand together.
+    public static func .* (lhs: Self, rhs: Self) -> [Element] {
+        precondition(lhs.count == rhs.count)
+        return zip(lhs, rhs).map(*)
+    }
+
+    /// Return the result of multiplying each element of the vector by a scalar.
+    public static func .* (vector: Self, scalar: Element) -> [Element] {
+        return vector.map { $0 * scalar }
+    }
+
+    /// Return the result of multiplying each element of the vector by a scalar.
+    public static func .* (scalar: Element, vector: Self) -> [Element] {
+        return vector .* scalar
     }
 
     /// Return the dot product of two vectors.

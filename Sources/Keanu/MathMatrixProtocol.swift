@@ -16,6 +16,9 @@ where
     static func .+ (scalar: Element, matrix: Self) -> Self
     static func .- (lhs: Self, rhs: Self) -> Self
     static func .- (matrix: Self, scalar: Element) -> Self
+    static func .* (lhs: Self, rhs: Self) -> Self
+    static func .* (matrix: Self, scalar: Element) -> Self
+    static func .* (scalar: Element, matrix: Self) -> Self
     func dot(_ other: Self) -> Element
     func dot<T: Collection>(_ other: T) -> Element where T.Element == Element
 
@@ -67,6 +70,34 @@ extension MatrixOperations where Element: AdditiveArithmetic {
         return Self(rows)
     }
 
+    /// Element-wise multiplication of two matrices.
+    public static func .* (lhs: Self, rhs: Self) -> Self {
+        precondition(lhs.rowCount == rhs.rowCount)
+        precondition(lhs.columnCount == rhs.columnCount)
+        let products: [Element] = zip(lhs, rhs).map(*)
+        let rows: [[Element]] = stride(from: 0, to: products.count, by: lhs.rowCount).map {
+            Array(products[$0..<($0 + lhs.rowCount)])
+        }
+        return Self(rows)
+    }
+
+    /// Element-wise multiplication of a matrix by a scalar.
+    public static func .* (matrix: Self, scalar: Element) -> Self {
+        let products: [Element] = matrix.map { $0 * scalar }
+        let rows: [[Element]] = stride(from: 0, to: products.count, by: matrix.rowCount).map {
+            Array(products[$0..<($0 + matrix.rowCount)])
+        }
+        return Self(rows)
+    }
+
+    /// Element-wise multiplication of a matrix by a scalar.
+    public static func .* (scalar: Element, matrix: Self) -> Self {
+        let products: [Element] = matrix.map { $0 * scalar }
+        let rows: [[Element]] = stride(from: 0, to: products.count, by: matrix.rowCount).map {
+            Array(products[$0..<($0 + matrix.rowCount)])
+        }
+        return Self(rows)
+    }
     /// Return the dot product of two matrices that are vectors.
     public func dot(_ other: Self) -> Element {
         assert(isVector)

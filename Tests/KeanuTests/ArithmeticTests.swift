@@ -30,6 +30,21 @@ final class CollectionArithmeticTests: XCTestCase {
         let expected = [1, 3, 5]
         XCTAssertEqual(vector .- scalar, expected)
     }
+
+    func testVectorVectorMultiplcation() {
+        let a = [1, 2, 3]
+        let b = [4, 5, 6]
+        let expected = [4, 10, 18]
+        XCTAssertEqual(a .* b, expected)
+    }
+
+    func testVectorScalarMultiplication() {
+        let vector = [1, 2, 3]
+        let scalar = 2
+        let expected = [2, 4, 6]
+        XCTAssertEqual(vector .* scalar, expected)
+        XCTAssertEqual(scalar .* vector, expected)
+    }
 }
 
 final class MatrixArithmeticTests: XCTestCase {
@@ -60,5 +75,20 @@ final class MatrixArithmeticTests: XCTestCase {
         let scalar = 1
         let expected = [[1, 3], [5, 7]] as Matrix
         XCTAssertEqual(matrix .- scalar, expected)
+    }
+
+    func testMatrixElementMultiplication() {
+        let a = [[1, 3], [5, 7]] as Matrix
+        let b = [[2, 4], [6, 8]] as Matrix
+        let expected = [[2, 12], [30, 56]] as Matrix
+        XCTAssertEqual(a .* b, expected)
+    }
+
+    func testMatrixScalarMultiplication() {
+        let matrix = [[1, 2], [3, 4]] as Matrix
+        let scalar = 2
+        let expected = [[2, 4], [6, 8]] as Matrix
+        XCTAssertEqual(matrix .* scalar, expected)
+        XCTAssertEqual(scalar .* matrix, expected)
     }
 }
