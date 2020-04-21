@@ -19,6 +19,7 @@ where
     static func .* (lhs: Self, rhs: Self) -> Self
     static func .* (matrix: Self, scalar: Element) -> Self
     static func .* (scalar: Element, matrix: Self) -> Self
+    static func ** (lhs: Self, rhs: Self) -> Self
     func dot(_ other: Self) -> Element
     func dot<T: Collection>(_ other: T) -> Element where T.Element == Element
 
@@ -98,6 +99,23 @@ extension MatrixOperations where Element: AdditiveArithmetic {
         }
         return Self(rows)
     }
+
+    /// Matrix multiplication of two matrices.
+    public static func ** (lhs: Self, rhs: Self) -> Self {
+        precondition(lhs.columnCount == rhs.rowCount)
+        var rows: [[Element]] = []
+        for rowIndex in 0..<lhs.rowCount {
+            var row: [Element] = []
+            for columnIndex in 0..<rhs.columnCount {
+                let rowView = lhs.row(rowIndex)
+                let columnView = rhs.column(columnIndex)
+                row.append(rowView.dot(columnView))
+            }
+            rows.append(row)
+        }
+        return Self(rows)
+    }
+
     /// Return the dot product of two matrices that are vectors.
     public func dot(_ other: Self) -> Element {
         precondition(isVector)
