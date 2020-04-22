@@ -47,6 +47,12 @@ where
     /// return the single value in the matrix.
     var scalar: Element? { get }
 
+    /// An ordered collection of all of the row views for this matrix.
+    var rows: [RowView] { get }
+
+    /// An ordered collection of all of the column views for this matrix.
+    var columns: [ColumnView] { get }
+
     /// Initialize a matrix with a single repeated value.
     init(rows: Int, columns: Int, initialValue: Element)
 
@@ -147,6 +153,16 @@ extension MatrixProtocol where RowView.Element == Element, ColumnView.Element ==
             return nil
         }
         return self[0, 0]
+    }
+
+    /// An ordered collection of all of the row views for this matrix.
+    public var rows: [RowView] {
+        (0..<rowCount).map { row($0) }
+    }
+
+    /// An ordered collection of all of the column views for this matrix.
+    public var columns: [ColumnView] {
+        (0..<columnCount).map { column($0) }
     }
 
     /// Access elements in the matrix with a *row*, *column* subscript.
