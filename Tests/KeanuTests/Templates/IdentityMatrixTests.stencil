@@ -1,0 +1,34 @@
+{% for Scalar in types.based.Numeric|!protocol %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}IdentityTests
+import XCTest
+
+@testable import Keanu
+
+// Matrix type: {{ Matrix.name }}
+// Scalar type: {{ Scalar.name }}
+final class {{ Matrix.name }}{{ Scalar.name }}IdentityTests: XCTestCase {
+    func testIdentityMatrix0() {
+        let m = Matrix<{{ Scalar.name }}>.identityMatrix(size: 0)
+        XCTAssert(m.isEmpty)
+    }
+
+    func testIdentityMatrix1() {
+        let m = Matrix<{{ Scalar.name }}>.identityMatrix(size: 1)
+        XCTAssertEqual(m.scalar, {{ Scalar.name }}(exactly: 1))
+    }
+
+    func testIdentityMatrix() {
+        let matrixSize = 5
+        let m = Matrix<{{ Scalar.name }}>.identityMatrix(size: matrixSize)
+        for row in 0..<matrixSize {
+            for column in 0..<matrixSize {
+                XCTAssertEqual(m[row, column], row == column ? {{ Scalar.name }}(exactly: 1) : {{ Scalar.name }}.zero)
+            }
+        }
+    }
+}
+// sourcery:end
+
+{% endfor %}
+{% endfor %}
