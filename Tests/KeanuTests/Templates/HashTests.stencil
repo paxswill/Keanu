@@ -28,6 +28,12 @@ final class Hash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
         XCTAssertEqual(m1, m2)
     }
 
+    func testTransposedNotEqual() {
+        let rowVector = [[1, 2, 3, 4, 5]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let columnVector = [[1], [2], [3], [4], [5]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertNotEqual(hashOf(rowVector), hashOf(columnVector))
+    }
+
 {% if Matrix|implements: "ContiguousMatrixProtocol" %}
     func testDifferentOrderEqual() {
         let m1 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], order: .rowMajor)
@@ -41,7 +47,7 @@ final class Hash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
         XCTAssertNotEqual(hashOf(m1), hashOf(m2))
     }
 
-    func testTransposedNotEqual() {
+    func testTransposedOrderNotEqual() {
         let m1 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], sourceOrder: .rowMajor, order: .rowMajor)
         let m2 = {{ Matrix.name }}<{{ Scalar.name }}>(
             [[1, 2, 3], [4, 5, 6]],
