@@ -16,7 +16,6 @@ fi
     swift-format \
     lint \
 	--configuration "${SRCROOT}/.swift-format" \
-    -r \
-    "$SRCROOT"/Sources \
-    "$SRCROOT"/Tests \
+    "$SRCROOT"/Sources/Keanu/**.swift \
+    "$SRCROOT"/Tests/KeanuTests/*.swift \
     "$SRCROOT"/Package.swift
