@@ -1,0 +1,74 @@
+{% for Scalar in types.based.Numeric|!protocol %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}InitTests
+
+import XCTest
+
+@testable import Keanu
+
+// Matrix type: {{ Matrix.name }}
+// Scalar type: {{ Scalar.name }}
+final class {{ Matrix.name }}{{ Scalar.name }}InitTests: XCTestCase {
+    func testRepeatingInit() {
+        let numRows = 2
+        let numCols = 7
+        let value = 1 as {{ Scalar.name }}
+        let matrix = {{ Matrix.name }}<{{ Scalar.name }}>(rows: numRows, columns: numCols, initialValue: value)
+        XCTAssertEqual(matrix.count, numCols * numRows)
+        XCTAssertEqual(matrix.rowCount, numRows)
+        XCTAssertEqual(matrix.columnCount, numCols)
+        XCTAssert(matrix.allSatisfy { value == $0 })
+    }
+
+    func testZeroInit() {
+        let numRows = 2
+        let numCols = 7
+        let matrix = {{ Matrix.name }}<{{ Scalar.name }}>(rows: numRows, columns: numCols)
+        XCTAssertEqual(matrix.count, numCols * numRows)
+        XCTAssertEqual(matrix.rowCount, numRows)
+        XCTAssertEqual(matrix.columnCount, numCols)
+        XCTAssert(matrix.allSatisfy { $0 == {{ Scalar.name}}.zero })
+    }
+
+    func testNestedArrayInit() {
+        let matrix = {{ Matrix.name }}<{{Scalar.name }}>([[0, 1, 2], [3, 4, 5]])
+        XCTAssertEqual(matrix.storage, [0, 1, 2, 3, 4, 5])
+        XCTAssertEqual(matrix.rowCount, 2)
+        XCTAssertEqual(matrix.columnCount, 3)
+    }
+
+    func testArrayLiteral() {
+        let matrix = [[1, 2], [3, 4], [5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(matrix.storage, [1, 2, 3, 4, 5, 6])
+        XCTAssertEqual(matrix.rowCount, 3)
+        XCTAssertEqual(matrix.columnCount, 2)
+    }
+
+{% if Matrix|implements: "ContiguousMatrixProtocol" %}
+    func testTransposeArrayInitColumnMajor() {
+        let matrix = {{ Matrix.name }}<{{Scalar.name }}>(
+            [[2, 4, 6], [8, 10, 12]],
+            sourceOrder: .rowMajor,
+            order: .columnMajor
+        )
+        XCTAssertEqual(matrix.storage, [2, 8, 4, 10, 6, 12])
+        XCTAssertEqual(matrix.rowCount, 2)
+        XCTAssertEqual(matrix.columnCount, 3)
+    }
+
+    func testTransposeArrayInitRowMajor() {
+        let matrix = {{ Matrix.name }}<{{Scalar.name }}>(
+            [[1, 2, 3], [2, 4, 6]],
+            sourceOrder: .columnMajor,
+            order: .rowMajor
+        )
+        XCTAssertEqual(matrix.storage, [1, 2, 3, 2, 4, 6])
+        XCTAssertEqual(matrix.rowCount, 3)
+        XCTAssertEqual(matrix.columnCount, 2)
+    }
+{% endif %}
+}
+// sourcery:end
+
+{% endfor %}
+{% endfor %}
