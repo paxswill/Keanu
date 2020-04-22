@@ -87,6 +87,12 @@ where
     ///
     /// The order will always be (*row*, *column*).
     subscript(row: Int, column: Int) -> Element { get set }
+
+    /// Transpose the elements of the matrix in-place
+    mutating func transpose()
+
+    /// Return a new matrix with the same contents as this one, but transposed.
+    func transposed() -> Self
 }
 
 extension MatrixProtocol where RowView.Element == Element, ColumnView.Element == Element {
@@ -177,6 +183,13 @@ extension MatrixProtocol where RowView.Element == Element, ColumnView.Element ==
     /// Create a new matrix as a copy of another matrix.
     public init<T: MatrixProtocol>(fromMatrix source: T) where T.Element == Element {
         self.init(source.rows.map { Array($0) })
+    }
+
+    /// Return a new matrix with the same contents as this one, but transposed.
+    public func transposed() -> Self {
+        var newMatrix = Self(fromMatrix: self)
+        newMatrix.transpose()
+        return newMatrix
     }
 }
 

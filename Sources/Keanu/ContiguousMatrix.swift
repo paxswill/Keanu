@@ -16,10 +16,10 @@ public struct ContiguousMatrix<T>: MatrixProtocol, ContiguousMatrixProtocol {
     public typealias ColumnView = BasicColumnView<Self, Element>
 
     /// The number of rows in the matrix.
-    public let rowCount: Int
+    public private(set) var rowCount: Int
 
     /// The number of columns in the matrix.
-    public let columnCount: Int
+    public private(set) var columnCount: Int
 
     /// Whether this matrix is using a row-major or column-major representation
     /// internally.
@@ -126,6 +126,21 @@ public struct ContiguousMatrix<T>: MatrixProtocol, ContiguousMatrixProtocol {
     /// Set an element at the given row and column.
     @inlinable mutating public func setElement(_ element: T, row: Int, column: Int) {
         storage[indexFor(row: row, column: column)] = element
+    }
+
+    /// Transpose the elements of the matrix in-place
+    public mutating func transpose() {
+        var newStorage = ContiguousArray<Element>()
+        newStorage.reserveCapacity(storage.count)
+        for columnIndex in 0..<columnCount {
+            for rowIndex in 0..<rowCount{
+                newStorage.append(self[rowIndex, columnIndex])
+            }
+        }
+        storage = newStorage
+        let temp = rowCount
+        rowCount = columnCount
+        columnCount = temp
     }
 }
 

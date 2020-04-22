@@ -16,10 +16,10 @@ public struct BasicMatrix<T>: MatrixProtocol {
     public typealias ColumnView = BasicColumnView<Self, Element>
 
     /// The number of rows in the matrix.
-    public let rowCount: Int
+    public private(set) var rowCount: Int
 
     /// The number of columns in the matrix.
-    public let columnCount: Int
+    public private(set) var columnCount: Int
 
     // This would normally be private, but needs to be internal to be usable
     // from inline.
@@ -72,6 +72,21 @@ public struct BasicMatrix<T>: MatrixProtocol {
     /// Set an element at the given row and column.
     @inlinable mutating public func setElement(_ element: T, row: Int, column: Int) {
         storage[row][column] = element
+    }
+
+    /// Transpose the elements of the matrix in-place
+    public mutating func transpose() {
+        var newStorage = [[Element]]()
+        for columnIndex in 0..<columnCount {
+            var newRow = [Element]()
+            for rowIndex in 0..<rowCount {                newRow.append(self[rowIndex, columnIndex])
+            }
+            newStorage.append(newRow)
+        }
+        storage = newStorage
+        let temp = rowCount
+        rowCount = columnCount
+        columnCount = temp
     }
 }
 
