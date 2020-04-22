@@ -2,7 +2,7 @@
 ///
 /// This implementation should be able to be used on all platforms Swift
 /// supports.
-public struct BasicMatrix<T>: MutableMatrixProtocol, ContiguousMatrixProtocol {
+public struct BasicMatrix<T>: MatrixProtocol, ContiguousMatrixProtocol {
     /// The type of elements contained within this matrix.
     public typealias Element = T
 
@@ -10,10 +10,10 @@ public struct BasicMatrix<T>: MutableMatrixProtocol, ContiguousMatrixProtocol {
     public typealias Index = MatrixIndex
 
     /// The type of the views over individual rows of the matrix.
-    public typealias RowView = MutableBasicRowView<Element>
+    public typealias RowView = BasicRowView<Element>
 
     /// The type of the views over individual columns of the matrix.
-    public typealias ColumnView = MutableBasicColumnView<Element>
+    public typealias ColumnView = BasicColumnView<Element>
 
     /// The number of rows in the matrix.
     public let rowCount: Int

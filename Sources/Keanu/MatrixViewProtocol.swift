@@ -1,7 +1,7 @@
 // MARK: Common view functionality
 
 /// Protocol for a view of a single row or column in a matrix.
-public protocol MatrixViewProtocol: Collection
+public protocol MatrixViewProtocol: MutableCollection
 where
     Index == Int,
     SourceMatrix.Element == Element
@@ -10,19 +10,13 @@ where
     //associatedtype Element = SourceMatrix.Element
 
     /// The matrix that this view belongs to.
-    var matrix: SourceMatrix { get }
+    var matrix: SourceMatrix { get set }
 
     /// The index of the row or column in the matrix that this view covers.
     var sourceIndex: Index { get }
 
     /// Create a view of a row or column in a matrix.
     init(_ matrix: SourceMatrix, index: Index)
-}
-
-/// Protocol for views over mutable matrices.
-public protocol MutableMatrixViewProtocol: MatrixViewProtocol, MutableCollection
-where SourceMatrix: MutableMatrixProtocol {
-    var matrix: SourceMatrix { get set }
 }
 
 extension MatrixViewProtocol where Element: Equatable {
@@ -65,18 +59,6 @@ extension RowViewProtocol {
 
     /// Access the elements in this row of the matrix.
     public subscript(columnIndex: Index) -> Element {
-        return matrix[sourceIndex, columnIndex]
-    }
-}
-
-/// A view over a single row in a mutable matrix.
-public protocol MutableRowViewProtocol: RowViewProtocol, MutableMatrixViewProtocol {
-    var matrix: SourceMatrix { get set }
-}
-
-extension MutableRowViewProtocol {
-    /// Access the elements in this row of the matrix.
-    public subscript(columnIndex: Index) -> Element {
         get {
             return matrix[sourceIndex, columnIndex]
         }
@@ -109,18 +91,6 @@ extension ColumnViewProtocol {
     }
 
     /// Access the elements in this column of the matrix.
-    public subscript(rowIndex: Index) -> Element {
-        return matrix[rowIndex, sourceIndex]
-    }
-}
-
-/// A view over a single column in a mutable matrix.
-public protocol MutableColumnViewProtocol: ColumnViewProtocol, MutableMatrixViewProtocol {
-    var matrix: SourceMatrix { get set }
-}
-
-extension MutableColumnViewProtocol {
-    /// Access the elements in this row of the matrix.
     public subscript(rowIndex: Index) -> Element {
         get {
             return matrix[rowIndex, sourceIndex]

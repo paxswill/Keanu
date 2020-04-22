@@ -3,7 +3,7 @@
 /// All indexes start from 0. The dimensions of the matrix are immutable, but
 /// each element's value *is* mutable.
 public protocol MatrixProtocol:
-    Collection,
+    MutableCollection,
     ExpressibleByArrayLiteral
 where
     Index == MatrixIndex,
@@ -77,13 +77,13 @@ where
     /// Get an element at the given row and column.
     func getElement(row: Int, column: Int) -> Element
 
+    /// Set an element at the given row and column.
+    mutating func setElement(_ element: Element, row: Int, column: Int)
+
     /// Access elements in the matrix with a *row*, *column* subscript.
     ///
     /// The order will always be (*row*, *column*).
-    subscript(row: Int, column: Int) -> Element { get }
-
-    /// Access elements in the matrix by (row, column) tuple.
-    subscript(index: Index) -> Element { get }
+    subscript(row: Int, column: Int) -> Element { get set }
 }
 
 extension MatrixProtocol where RowView.Element == Element, ColumnView.Element == Element {
@@ -142,12 +142,22 @@ extension MatrixProtocol where RowView.Element == Element, ColumnView.Element ==
 
     /// Access elements in the matrix with a *row*, *column* subscript.
     public subscript(row: Int, column: Int) -> Element {
-        return getElement(row: row, column: column)
+        get {
+            return getElement(row: row, column: column)
+        }
+        set {
+            setElement(newValue, row: row, column: column)
+        }
     }
 
     /// Access elements in the matrix by (row, column) tuple.
     public subscript(index: Index) -> Element {
-        return getElement(row: index.row, column: index.column)
+        get {
+            return getElement(row: index.row, column: index.column)
+        }
+        set {
+            setElement(newValue, row: index.row, column: index.column)
+        }
     }
 
     /// Return the index immediately after the given index, in row-major order.
