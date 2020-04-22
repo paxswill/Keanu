@@ -1,6 +1,6 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}MultiplicationTests+TemplateName
+// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}MultiplicationTests
 import XCTest
 
 @testable import Keanu
@@ -8,12 +8,15 @@ import XCTest
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
 final class {{ Matrix.name }}{{ Scalar.name }}MultiplicationTests: XCTestCase {
+{# The results of the matrix multiplication will overflow an 8-bit signed int. #}
+{% if Scalar.name != "Int8" %}
     func testMultiply() {
-        let a = [[2, 3], [1, 4]] as {{ Matrix.name }}<{{ Scalar.name }}>
-        let b = [[0, 5], [3, 4]] as {{ Matrix.name }}<{{ Scalar.name }}>
-        let ab = [[9, 2], [12, 21]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let a = [[1, 2, 3], [4, 5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let b = [[7, 8], [9, 10], [11, 12]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let ab = [[58, 64], [139, 154]] as {{ Matrix.name }}<{{ Scalar.name }}>
         XCTAssertEqual(a ** b, ab)
     }
+{% endif %}
 
 {% if Scalar.name|!hasPrefix:"U" %}
     func testMultiplySigned() {
