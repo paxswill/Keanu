@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}MultiplicationTests
+// sourcery:file:Generated/Multiplication{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}MultiplicationTests: XCTestCase {
+final class Multiplication{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
 {# The results of the matrix multiplication will overflow an 8-bit signed int. #}
 {% if Scalar.name != "Int8" %}
     func testMultiply() {

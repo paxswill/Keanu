@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}DotProductTests
+// sourcery:file:Generated/DotProduct{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}DotProductTests: XCTestCase {
+final class DotProduct{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testDotSingle() {
         let lhs = [[1]] as {{ Matrix.name }}<{{ Scalar.name }}>
         let rhs = [[10]] as {{ Matrix.name }}<{{ Scalar.name }}>
@@ -44,7 +44,7 @@ final class {{ Matrix.name }}{{ Scalar.name }}DotProductTests: XCTestCase {
     }
 }
 
-final class {{ Matrix.name }}{{ Scalar.name }}ViewDotProductTests: XCTestCase {
+final class ViewDotProduct{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testDotSingleRow() {
         let lhs = [[1]] as {{ Matrix.name }}<{{ Scalar.name }}>
         let rhs = [[10]] as {{ Matrix.name }}<{{ Scalar.name }}>

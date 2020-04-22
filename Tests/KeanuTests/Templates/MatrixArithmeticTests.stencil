@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}ArithmeticTests
+// sourcery:file:Generated/Arithmetic{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}ArithmeticTests: XCTestCase {
+final class Arithmetic{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testMatrixMatrixAddition() {
         let a = [[1, 2], [3, 4]] as {{ Matrix.name }}<{{ Scalar.name }}>
         let b = [[5, 6], [7, 8]] as {{ Matrix.name }}<{{ Scalar.name }}>

@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}EqualityTests
+// sourcery:file:Generated/Equality{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}EqualityTests: XCTestCase {
+final class Equality{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testEmptyEqual() {
         let m1 = [[]] as {{ Matrix.name }}<{{ Scalar.name }}>
         let m2 = [[]] as {{ Matrix.name }}<{{ Scalar.name }}>

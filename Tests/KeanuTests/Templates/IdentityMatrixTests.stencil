@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}IdentityTests
+// sourcery:file:Generated/Identity{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}IdentityTests: XCTestCase {
+final class Identity{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testIdentityMatrix0() {
         let m = Matrix<{{ Scalar.name }}>.identityMatrix(size: 0)
         XCTAssert(m.isEmpty)

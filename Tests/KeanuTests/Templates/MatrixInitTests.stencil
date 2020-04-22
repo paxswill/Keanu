@@ -1,6 +1,6 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}InitTests
+// sourcery:file:Generated/Init{{ Matrix.name }}{{ Scalar.name }}Tests
 
 import XCTest
 
@@ -8,7 +8,7 @@ import XCTest
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}InitTests: XCTestCase {
+final class Init{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testRepeatingInit() {
         let numRows = 2
         let numCols = 7

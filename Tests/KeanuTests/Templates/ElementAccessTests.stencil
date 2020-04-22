@@ -1,13 +1,13 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}ElementAccessTests
+// sourcery:file:Generated/ElementAccess{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}ElementAccessTests: XCTestCase {
+final class ElementAccess{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     var matrix: {{ Matrix.name }}<{{ Scalar.name }}> = [[1, 3, 5], [2, 4, 6]]
 
     var rowMajorOrder: [{{ Scalar.name }}] = [1, 3, 5, 2, 4, 6]

@@ -1,6 +1,6 @@
 {% for Scalar in types.based.Numeric|!protocol %}
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}HashTests
+// sourcery:file:Generated/Hash{{ Matrix.name }}{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
@@ -8,7 +8,7 @@ import XCTest
 
 // Matrix type: {{ Matrix.name }}
 // Scalar type: {{ Scalar.name }}
-final class {{ Matrix.name }}{{ Scalar.name }}HashTests: XCTestCase {
+final class Hash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
 
     func testEmptyHash() {
         let m1 = [[]] as {{ Matrix.name }}<{{ Scalar.name }}>
@@ -53,7 +53,7 @@ final class {{ Matrix.name }}{{ Scalar.name }}HashTests: XCTestCase {
 {% endif %}
 }
 
-final class {{ Matrix.name }}{{ Scalar.name }}ViewHashTests: XCTestCase {
+final class ViewHash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
     func testRowHashEqual() {
         let m = [[1, 2, 3], [1, 2, 3]] as {{ Matrix.name }}<{{ Scalar.name }}>
         XCTAssertEqual(hashOf(m.row(0)), hashOf(m.row(1)))

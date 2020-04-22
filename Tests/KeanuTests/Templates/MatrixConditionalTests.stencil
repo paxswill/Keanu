@@ -1,11 +1,11 @@
 {% for Matrix in types.implementing.MatrixProtocol|struct %}
-// sourcery:file:Generated/{{ Matrix.name }}ConditionalTests
+// sourcery:file:Generated/Conditional{{ Matrix.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Matrix type: {{ Matrix.name }}
-final class {{ Matrix.name }}ConditionalTests: XCTestCase {
+final class Conditional{{ Matrix.name }}Tests: XCTestCase {
     typealias Element = Int
 
     func testIsEmpty1D() {

@@ -1,12 +1,12 @@
 {% for Scalar in types.based.Numeric|!protocol %}
-// sourcery:file:Generated/Collection{{ Scalar.name }}ArithmeticTests
+// sourcery:file:Generated/CollectionArithmetic{{ Scalar.name }}Tests
 import XCTest
 
 @testable import Keanu
 
 // Scalar type: {{ Scalar.name }}
 
-final class Collection{{ Scalar.name }}ArithmeticTests: XCTestCase {
+final class CollectionArithmetic{{ Scalar.name }}Tests: XCTestCase {
     func testVectorVectorAddition() {
         let a = [1, 2, 3] as [{{ Scalar.name }}]
         let b = [4, 5, 6] as [{{ Scalar.name }}]
