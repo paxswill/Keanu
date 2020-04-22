@@ -66,6 +66,9 @@ where
     /// - Parameter arrayLiteral: a variadic argument of arrays of Elements.
     init(arrayLiteral: [Element]...)
 
+    /// Create a new matrix as a copy of another matrix.
+    init<T: MatrixProtocol>(fromMatrix: T) where T.Element == Element
+
     // MARK: Element Access
 
     /// Returns a `RowView` for the given row.
@@ -169,6 +172,11 @@ extension MatrixProtocol where RowView.Element == Element, ColumnView.Element ==
     /// Create a matrix from a two dimensional array literal.
     public init(arrayLiteral elements: [Element]...) {
         self.init(elements)
+    }
+
+    /// Create a new matrix as a copy of another matrix.
+    public init<T: MatrixProtocol>(fromMatrix source: T) where T.Element == Element {
+        self.init(source.rows.map { Array($0) })
     }
 }
 

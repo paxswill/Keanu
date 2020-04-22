@@ -44,6 +44,15 @@ final class Init{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
         XCTAssertEqual(matrix.columnCount, 2)
     }
 
+    func testMatrixCopy() {
+        var original = [[1, 2, 3], [4, 5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let copied = {{ Matrix.name }}(fromMatrix: original)
+        XCTAssertEqual(original, copied)
+        // Modify the original, and make sure the copy didn't change
+        original[0, 0] = 10
+        XCTAssertNotEqual(original, copied)
+    }
+
 {% if Matrix|implements: "ContiguousMatrixProtocol" %}
     func testTransposeArrayInitColumnMajor() {
         let matrix = {{ Matrix.name }}<{{ Scalar.name }}>(
