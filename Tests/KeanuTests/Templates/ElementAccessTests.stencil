@@ -1,0 +1,95 @@
+{% for Scalar in types.based.Numeric|!protocol %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+// sourcery:file:Generated/{{ Matrix.name }}{{ Scalar.name }}ElementAccessTests
+import XCTest
+
+@testable import Keanu
+
+// Matrix type: {{ Matrix.name }}
+// Scalar type: {{ Scalar.name }}
+final class {{ Matrix.name }}{{ Scalar.name }}ElementAccessTests: XCTestCase {
+    var matrix: {{ Matrix.name }}<{{ Scalar.name }}> = [[1, 3, 5], [2, 4, 6]]
+
+    var rowMajorOrder: [{{ Scalar.name }}] = [1, 3, 5, 2, 4, 6]
+    var columnMajorOrder: [{{ Scalar.name }}] = [1, 2, 3, 4, 5, 6]
+
+    func testGetElement() {
+        var expected = rowMajorOrder.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                let element = matrix.getElement(row: rowIndex, column: columnIndex)
+                XCTAssertEqual(element, expected.next())
+            }
+        }
+    }
+
+    func testGetSubscript() {
+        var expected = rowMajorOrder.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                XCTAssertEqual(matrix[rowIndex, columnIndex], expected.next())
+            }
+        }
+    }
+
+    func testSetElement() {
+        let expected = rowMajorOrder.map { $0 * 2 }
+        var expectedIterator = expected.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                matrix.setElement(expectedIterator.next()!, row: rowIndex, column: columnIndex)
+            }
+        }
+        expectedIterator = expected.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                XCTAssertEqual(
+                    matrix.getElement(row: rowIndex, column: columnIndex),
+                    expectedIterator.next()!
+                )
+            }
+        }
+    }
+
+    func testSetSubscript() {
+        let expected = rowMajorOrder.map { $0 * 2 }
+        var expectedIterator = expected.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                matrix[rowIndex, columnIndex] = expectedIterator.next()!
+            }
+        }
+        expectedIterator = expected.makeIterator()
+        for rowIndex in 0..<matrix.rowCount {
+            for columnIndex in 0..<matrix.columnCount {
+                XCTAssertEqual(
+                    matrix.getElement(row: rowIndex, column: columnIndex),
+                    expectedIterator.next()!
+                )
+            }
+        }
+    }
+
+    func testRowMajorIterator() throws {
+        for (actual, expected) in zip(matrix, rowMajorOrder) {
+            XCTAssertEqual(actual, expected)
+        }
+    }
+
+    // TODO: Add column major iterator
+    func testColumnMajorIterator() throws {
+        try XCTSkipIf(
+            true,
+            "Column-major iterator is not implemented."
+        )
+        for (actual, expected) in zip(matrix, rowMajorOrder) {
+            XCTAssertEqual(actual, expected)
+        }
+    }
+
+
+}
+// sourcery:end
+
+{% endfor %}
+{% endfor %}
