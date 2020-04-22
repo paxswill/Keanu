@@ -12,11 +12,9 @@ if [ "x" = "x${SRCROOT}" ]; then
     cd "$_OLD_DIR"
     unset _OLD_DIR
 fi
-"${SRCROOT}/BuildTools/run-build-tool.sh" \
-    swift-format \
-    lint \
-	--configuration "${SRCROOT}/.swift-format" \
-    -r \
-    "$SRCROOT"/Sources \
-    "$SRCROOT"/Tests \
-    "$SRCROOT"/Package.swift
+exec swift run \
+    -c release \
+    --package-path "$SRCROOT"/BuildTools \
+    --skip-update \
+    `[ "x" = "x${XCODE_VERSION_MAJOR}" ] && printf "%s %s" '--build-path' "${SRCROOT}/BuildTools/.build-cli"` \
+    "$@"

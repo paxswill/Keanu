@@ -1,0 +1,6 @@
+sources:
+  - ./Sources/Keanu
+templates:
+  - ./Tests/KeanuTests/Templates/
+output:
+  path: ./Tests/KeanuTests/

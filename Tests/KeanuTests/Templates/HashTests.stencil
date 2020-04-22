@@ -1,0 +1,91 @@
+{% for Scalar in types.based.Numeric|!protocol %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+// sourcery:file:Generated/Hash{{ Matrix.name }}{{ Scalar.name }}Tests
+import XCTest
+
+@testable import Keanu
+
+
+// Matrix type: {{ Matrix.name }}
+// Scalar type: {{ Scalar.name }}
+final class Hash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
+
+    func testEmptyHash() {
+        let m1 = [[]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let m2 = [[]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(hashOf(m1), hashOf(m2))
+    }
+
+    func testDifferentSizes() {
+        let m1 = [[1, 2], [3, 4], [5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let m2 = [[1, 2, 3], [4, 5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertNotEqual(hashOf(m1), hashOf(m2))
+    }
+
+    func testSingleEqual() {
+        let m1 = [[1]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        let m2 = [[1]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(m1, m2)
+    }
+
+{% if Matrix|implements: "ContiguousMatrixProtocol" %}
+    func testDifferentOrderEqual() {
+        let m1 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], order: .rowMajor)
+        let m2 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], order: .columnMajor)
+        XCTAssertEqual(hashOf(m1), hashOf(m2))
+    }
+
+    func testDifferentOrderNotEqual() {
+        let m1 = {{ Matrix.name }}<{{ Scalar.name }}>([[4, 5, 6], [4, 5, 6]], order: .rowMajor)
+        let m2 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], order: .columnMajor)
+        XCTAssertNotEqual(hashOf(m1), hashOf(m2))
+    }
+
+    func testTransposedNotEqual() {
+        let m1 = {{ Matrix.name }}<{{ Scalar.name }}>([[1, 2, 3], [4, 5, 6]], sourceOrder: .rowMajor, order: .rowMajor)
+        let m2 = {{ Matrix.name }}<{{ Scalar.name }}>(
+            [[1, 2, 3], [4, 5, 6]],
+            sourceOrder: .columnMajor,
+            order: .columnMajor
+        )
+        XCTAssertNotEqual(hashOf(m1), hashOf(m2))
+    }
+{% endif %}
+}
+
+final class ViewHash{{ Matrix.name }}{{ Scalar.name }}Tests: XCTestCase {
+    func testRowHashEqual() {
+        let m = [[1, 2, 3], [1, 2, 3]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(hashOf(m.row(0)), hashOf(m.row(1)))
+    }
+
+    func testRowHashNotEqual() {
+        let m = [[1, 2, 3], [4, 5, 6]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertNotEqual(hashOf(m.row(0)), hashOf(m.row(1)))
+    }
+
+    func testColumnHashEqual() {
+        let m = [[1, 2, 1], [3, 5, 3], [1, 2, 1]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertEqual(hashOf(m.column(0)), hashOf(m.column(2)))
+    }
+
+    func testColumnHashNotEqual() {
+        let m = [[1, 2, 1], [3, 5, 3], [1, 2, 1]] as {{ Matrix.name }}<{{ Scalar.name }}>
+        XCTAssertNotEqual(hashOf(m.column(0)), hashOf(m.column(1)))
+    }
+
+    // While we can't compare them to each other (at least not yet), row and
+    // column views will hash to the same value if they have the same element
+    // values.
+    func testRowColumnHashEqual() {
+        let size = 5
+        let m = {{ Matrix.name }}<{{ Scalar.name }}>.identityMatrix(size: size)
+        for index in 0..<size {
+            XCTAssertEqual(hashOf(m.row(index)), hashOf(m.column(index)))
+        }
+    }
+}
+// sourcery:end
+
+{% endfor %}
+{% endfor %}

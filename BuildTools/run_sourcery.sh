@@ -13,10 +13,5 @@ if [ "x" = "x${SRCROOT}" ]; then
     unset _OLD_DIR
 fi
 "${SRCROOT}/BuildTools/run-build-tool.sh" \
-    swift-format \
-    lint \
-	--configuration "${SRCROOT}/.swift-format" \
-    -r \
-    "$SRCROOT"/Sources \
-    "$SRCROOT"/Tests \
-    "$SRCROOT"/Package.swift
+    sourcery \
+	--config "${SRCROOT}/.sourcery.yml"
