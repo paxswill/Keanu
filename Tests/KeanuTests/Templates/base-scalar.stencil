@@ -1,0 +1,12 @@
+{% extends "base-test.stencil" %}
+
+{% block file_contents %}
+{% set test_contents %}{% block test_contents %}{% endblock %}{% endset %}
+{% for Scalar in types.based.Numeric|!protocol %}
+final class {{ base_name_var }}{{ Scalar.name }}: XCTestCase {
+    typealias Element = {{ Scalar.name }}
+    {{ test_contents }}
+}
+
+{% endfor %}
+{% endblock %}

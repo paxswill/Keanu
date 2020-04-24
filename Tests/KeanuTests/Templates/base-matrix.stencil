@@ -1,0 +1,13 @@
+{% extends "base-test.stencil" %}
+
+{% block file_contents %}
+{% set test_contents %}{% block test_contents %}{% endblock %}{% endset %}
+{% for Matrix in types.implementing.MatrixProtocol|struct %}
+final class {{ base_name_var }}{{ Matrix.name }}: XCTestCase {
+    typealias Element = Int
+    typealias TestMatrix = {{ Matrix.name }}<{{ Scalar.name }}>
+    {{ test_contents }}
+}
+
+{% endfor %}
+{% endblock %}
