@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import collections
 import configparser
 import enum
-import functools
-import itertools
 import logging
 import operator
 import pathlib
