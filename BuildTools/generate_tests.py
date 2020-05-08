@@ -20,12 +20,15 @@ logging.basicConfig(level=logging.INFO)
 
 
 class classproperty(property):
+    """A `property`, but on classes instead of instances."""
+
     def __get__(self, cls, owner):
         return classmethod(self.fget).__get__(None, owner)()
 
 
 class SwiftArchitecture(enum.Enum):
-    # using the swift platform identifiers for the string values here
+    """An enum for CPU architectures supported by Swift."""
+
     ARM_32 = "arm"
     ARM_64 = "arm64"
     X86_32 = "i386"
@@ -33,10 +36,12 @@ class SwiftArchitecture(enum.Enum):
 
     @classproperty
     def ARM(cls):
+        """A set covering 32 and 64 bit ARM architectures."""
         return frozenset((cls.ARM_32, cls.ARM_64))
 
     @classproperty
     def X86(cls):
+        """A set covering 32 and 64 bit x86 architectures."""
         return frozenset((cls.X86_32, cls.X86_64))
 
     @property
@@ -46,6 +51,8 @@ class SwiftArchitecture(enum.Enum):
 
 
 class SwiftOS(enum.Enum):
+    """An enum for operating systems supported by Swift."""
+
     MAC = "macOS"
     IOS = "iOS"
     TV = "tvOS"
@@ -54,6 +61,7 @@ class SwiftOS(enum.Enum):
 
     @classproperty
     def APPLE(cls):
+        """A set covering all Apple OSes."""
         return frozenset((cls.MAC, cls.IOS, cls.TV, cls.WATCH))
 
     @property
@@ -63,6 +71,12 @@ class SwiftOS(enum.Enum):
 
 
 class SwiftType:
+    """A Swift type to be given to templates.
+
+    The type can also be conditioned on specific platforms or architectures.
+    For example, Float80 is only available on x86 platforms.
+    """
+
     def __init__(self, name, os=None, archs=None):
         self.name = name
         if os is not None:
@@ -94,9 +108,17 @@ class SwiftType:
 
     @property
     def is_conditional(self):
+        """A boolean for if this type is only available on some platforms."""
         return self.os or self.archs
 
     def condition(self):
+        """Get the compilation condition for this type.
+
+        If this type is not predicated on certain OSes or architectures, it
+        returns the string `"true"`. Otherwise it returns a string of Swift
+        conditional compilation expressions approppriate for adding after
+        `#if`.
+        """
         predicates = []
         swift_getter = operator.attrgetter("swift_condition")
         predicates.extend(" && ".join(map(swift_getter, self.os)))
@@ -108,8 +130,8 @@ class SwiftType:
             return "true"
 
 
-
-SwiftNumericTypes = tuple(
+"""All Swift standard library number types."""
+SWIFT_NUMERICS = tuple(
     [
         SwiftType(f"{sign}Int{length}")
         for length in ["", 8, 16, 32, 64]
@@ -121,13 +143,23 @@ SwiftNumericTypes = tuple(
 
 
 class MatrixType(SwiftType):
+    """A specialized SwiftType for Matrix types.
+
+    The only major difference currently is it can distinguish between
+    contiguous and non-contiguous Matrix types.
+    """
+
     def __init__(self, *args, contiguous=False, **kwargs):
         self.contiguous = contiguous
         super().__init__(*args, **kwargs)
 
 
 class ExtendAction(argparse.Action):
-    """Compatibility shim for Python versions <3.8."""
+    """Compatibility shim for Python versions <3.8.
+
+    For Python >=3.8, the string `"extend"` can be given as an action to
+    argparse. For older versions this class can be given the same effect.
+    """
     def __call__(self, parser, namespace, values, option_string):
         if not hasattr(namespace, self.dest):
             setattr(namespace, self.dest, [])
@@ -240,14 +272,19 @@ def get_config():
 
 
 def is_leaf_template(template, context):
+    """Returns whether or not the given template is a leaf template or not.
+
+    A leaf template is one that is intended to be rendered. This is inferred by
+    checking for blocks that are empty. If any blocks render to an empty
+    string, the template is considered a non-leaf template.
+    """
     template_context = template.new_context(context)
-    resolved_blocks = {}
     for block_name, block in template.blocks.items():
         try:
             rendered = "".join(block(template_context)).strip()
         except jinja2.UndefinedError:
             # Ignore errors due to undefined values. If a block is using a
-            # variable, it should be printing something.
+            # variable, it'll be rendering something.
             pass
         except jinja2.TemplateError as exc:
             log.exception("Error rendering template %s", template.name)
@@ -264,10 +301,7 @@ def is_leaf_template(template, context):
 
 
 def leaf_templates(environment, context, extension=None):
-    """Generator that yields leaf templates.
-
-    Leaf templates are defined as those with no empty template blocks.
-    """
+    """Generator that yields leaf templates from the given environment."""
     list_kwargs = {}
     if extension is not None:
         list_kwargs["extensions"] = [extension]
@@ -302,7 +336,7 @@ def main():
     # tool, the lack of Linux compatibility makes it unsuitable for usage in
     # this project.
     context = {
-        "ScalarTypes": SwiftNumericTypes,
+        "ScalarTypes": SWIFT_NUMERICS,
         "MatrixTypes": [
             MatrixType("BasicMatrix"),
             MatrixType("ContiguousMatrix", contiguous=True),
