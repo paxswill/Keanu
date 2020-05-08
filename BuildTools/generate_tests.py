@@ -118,10 +118,12 @@ class SwiftType:
         """
         predicates = []
         swift_getter = operator.attrgetter("swift_condition")
-        predicates.extend(" && ".join(map(swift_getter, self.os)))
-        predicates.extend(" && ".join(map(swift_getter, self.archs)))
+        if self.os:
+            predicates.append(" || ".join(map(swift_getter, self.os)))
+        if self.archs:
+            predicates.append(" || ".join(map(swift_getter, self.archs)))
         if predicates:
-            return " || ".join(predicates)
+            return " && ".join(predicates)
         else:
             log.warning("Conditional compilation without a predicate!")
             return "true"
