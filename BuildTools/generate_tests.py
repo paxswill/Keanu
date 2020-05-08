@@ -62,18 +62,30 @@ class SwiftOS(enum.Enum):
 
 
 class SwiftType:
-    def __init__(self, name, platforms=None, archs=None):
+    def __init__(self, name, os=None, archs=None):
         self.name = name
-        self.platforms = platforms or []
-        self.archs = archs or []
+        if os is not None:
+            if isinstance(os, SwiftOS):
+                self.os = [os]
+            else:
+                self.os = os
+        else:
+            self.os = []
+        if archs is not None:
+            if isinstance(archs, SwiftArchitecture):
+                self.archs = [archs]
+            else:
+                self.archs = archs
+        else:
+            self.archs = []
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         args = [repr(self.name)]
-        if self.platforms:
-            args.append("platforms={{{}}}".format(", ".join(self.platforms)))
+        if self.os:
+            args.append("os={{{}}}".format(", ".join(self.os)))
         if self.archs:
             args.append("archs={{{}}}".format(", ".join(self.archs)))
         all_args = ", ".join(args)
@@ -81,7 +93,7 @@ class SwiftType:
 
     @property
     def is_conditional(self):
-        return self.platforms or self.archs
+        return self.os or self.archs
 
     def condition(self):
         predicates = []
