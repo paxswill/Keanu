@@ -3,5 +3,5 @@
 /Packages
 /*.xcodeproj
 xcuserdata/
-*.generated.swift
+Tests/KeanuTests/Generated/*.swift
 *.py[co]
