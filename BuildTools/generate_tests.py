@@ -201,10 +201,9 @@ def get_config():
                 section_name,
                 "verbose"
             )
+            # Only enable verbose mode, don't disable it
             if resolved_config["verbose"]:
                 log.level = logging.DEBUG
-            else:
-                log.level = logging.INFO
         # When resolving paths from a config file, use the location of the file
         # as the root for relative paths.
         def relative_to_config(path):
