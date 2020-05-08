@@ -4,3 +4,4 @@
 /*.xcodeproj
 xcuserdata/
 *.generated.swift
+*.py[co]
