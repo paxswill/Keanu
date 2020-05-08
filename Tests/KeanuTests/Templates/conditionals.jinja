@@ -1,0 +1,9 @@
+{% macro wrap_conditional(type) %}
+{% if type.is_conditional %}
+#if {{ type.condition() }}
+{% endif %}
+{{ caller() }}
+{% if type.is_conditional %}
+#endif
+{% endif %}
+{% endmacro %}

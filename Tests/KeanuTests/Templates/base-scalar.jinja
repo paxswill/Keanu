@@ -1,14 +1,17 @@
+{% from "conditionals.jinja" import wrap_conditional %}
 {% extends "base-test.jinja" %}
 
 {% block file_contents %}
 {% for Scalar in ScalarTypes %}
-{% if Scalar.is_conditional %}#if {{ Scalar.condition() }}{% endif %}
+{% call wrap_conditional(Scalar) %}
 final class {{ base_name|default("BaseScalar") }}{{ Scalar }}Tests: XCTestCase {
     typealias Element = {{ Scalar }}
+
     {% filter indent %}
-    {% block test_contents scoped %}{% endblock %}
+    {%+ block test_contents scoped %}{% endblock %}
     {% endfilter %}
 }
-{% if Scalar.is_conditional %}#endif{% endif %}
-{% endfor %}
+{% endcall %}
+
+{%+ endfor %}
 {% endblock %}

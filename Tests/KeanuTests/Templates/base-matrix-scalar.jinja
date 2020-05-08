@@ -1,19 +1,23 @@
+{% from "conditionals.jinja" import wrap_conditional %}
 {% extends "base-test.jinja" %}
 
 {% block file_contents %}
 {% for Matrix in MatrixTypes %}
-{% if Matrix.is_conditional %}#if {{ Matrix.condition() }}{% endif %}
+{% call wrap_conditional(Matrix) %}
 {% for Scalar in ScalarTypes %}
-{% if Scalar.is_conditional %}#if {{ Scalar.condition() }}{% endif %}
+{% call wrap_conditional(Scalar) %}
 final class {{ base_name|default("BaseMatrixScalar") }}{{ Matrix }}{{ Scalar }}Tests: XCTestCase {
     typealias Element = {{ Scalar }}
     typealias TestMatrix = {{ Matrix }}<{{ Scalar }}>
+
     {% filter indent %}
-    {% block test_contents scoped %}{% endblock %}
+    {%+ block test_contents scoped %}{% endblock %}
     {% endfilter %}
 }
-{% if Scalar.is_conditional %}#endif{% endif %}
-{% endfor %}
-{% if Matrix.is_conditional %}#endif{% endif %}
-{% endfor %}
+{% endcall %}
+
+{%+ endfor %}
+{% endcall %}
+
+{%+ endfor %}
 {% endblock %}

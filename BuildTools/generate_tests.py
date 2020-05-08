@@ -297,7 +297,8 @@ def main():
         undefined=jinja2.StrictUndefined,
         loader=loader,
         autoescape=False,
-        extensions=["jinja2.ext.debug"],
+        trim_blocks=True,
+        lstrip_blocks=True,
     )
     # Hard-coding in the types to test here. While Sourcery is an interesting
     # tool, the lack of Linux compatibility makes it unsuitable for usage in
