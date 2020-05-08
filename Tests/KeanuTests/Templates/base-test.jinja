@@ -1,0 +1,6 @@
+import XCTest
+
+@testable import Keanu
+{% set base_name %}{% block base_name %}{% endblock base_name %}{% endset %}
+// Tests for: {{ base_name }}
+{% block file_contents scoped %}{% endblock file_contents %}

@@ -1,6 +1,0 @@
-// sourcery:file:Generated/{% set base_name_var %}{% block base_name %}Base{% endblock %}{% endset %}{{ base_name_var }}
-import XCTest
-
-@testable import Keanu
-{% block file_contents %}{% endblock %}
-// sourcery:end

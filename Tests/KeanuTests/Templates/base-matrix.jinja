@@ -1,0 +1,15 @@
+{% extends "base-test.jinja" %}
+
+{% block file_contents %}
+{% for Matrix in MatrixTypes %}
+{% if Matrix.is_conditional %}#if {{ Matrix.condition() }}{% endif %}
+final class {{ base_name|default("BaseMatrix") }}{{ Matrix }}Tests: XCTestCase {
+    typealias Element = Int
+    typealias TestMatrix = {{ Matrix }}<{{ Scalar }}>
+    {% filter indent %}
+    {% block test_contents scoped %}{% endblock %}
+    {% endfilter %}
+}
+{% if Matrix.is_conditional %}#endif{% endif %}
+{% endfor %}
+{% endblock %}
