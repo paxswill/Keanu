@@ -38,7 +38,9 @@ class SwiftArchitecture(enum.Enum):
     def X86(cls):
         return frozenset((cls.X86_32, cls.X86_64))
 
-    def __str__(self):
+    @property
+    def swift_condition(self):
+        """The Swift conditional compilation expression for this enum value."""
         return f"arch({self.value})"
 
 
@@ -53,7 +55,9 @@ class SwiftOS(enum.Enum):
     def APPLE(cls):
         return frozenset((cls.MAC, cls.IOS, cls.TV, cls.WATCH))
 
-    def __str__(self):
+    @property
+    def swift_condition(self):
+        """The Swift conditional compilation expression for this enum value."""
         return f"os({self.value})"
 
 
@@ -69,19 +73,9 @@ class SwiftType:
     def __repr__(self):
         args = [repr(self.name)]
         if self.platforms:
-            args.append(
-                "platforms={{{}}}".format(", ".join(
-                    f"{platform.__class__.__name__}.{platform.name}"
-                    for platform in self.platforms
-                ))
-            )
+            args.append("platforms={{{}}}".format(", ".join(self.platforms)))
         if self.archs:
-            args.append(
-                "archs={{{}}}".format(", ".join(
-                    f"{arch.__class__.__name__}.{arch.name}"
-                    for arch in self.archs
-                ))
-            )
+            args.append("archs={{{}}}".format(", ".join(self.archs)))
         all_args = ", ".join(args)
         return f"{self.__class__.__name__}({all_args})"
 
@@ -91,8 +85,8 @@ class SwiftType:
 
     def condition(self):
         predicates = []
-        predicates.extend(str(platform) for platform in self.platforms)
-        predicates.extend(str(arch) for arch in self.archs)
+        predicates.extend(map(lambda c: c.swift_condition, self.platforms))
+        predicates.extend(map(lambda c: c.swift_condition, self.archs))
         if predicates:
             return " || ".join(predicates)
         else:
