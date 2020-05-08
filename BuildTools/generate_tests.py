@@ -193,33 +193,24 @@ def get_config():
                 log.level = logging.INFO
         # When resolving paths from a config file, use the location of the file
         # as the root for relative paths.
+        def relative_to_config(path):
+            if not path.is_absolute():
+                new_path = (config_path.parent / path).resolve()
+                log.debug("Resolving config path %s to %s", path, new_path)
+                return new_path
+            else:
+                return path
+
         if "template-dirs" in config:
             template_dirs = [
                 pathlib.Path(p.strip())
                 for p in config["template-dirs"].split(",")
             ]
-            for index, template_dir in enumerate(template_dirs):
-                if not template_dir.is_absolute():
-                    template_dirs[index] = (
-                        config_path.parent / template_dir
-                    ).resolve()
-                    log.debug(
-                        "Resolved template directory path %s to %s",
-                        template_dir,
-                        template_dirs[index]
-                    )
-            resolved_config["templates"] = template_dirs
+            resolved_config["templates"] = list(map(relative_to_config,
+                                                    template_dirs))
         if "output" in config:
             output_path = pathlib.Path(config["output"])
-            if not output_path.is_absolute():
-                new_output_path = (config_path.parent / output_path).resolve()
-                log.debug(
-                    "Resolved output path %s to %s",
-                    output_path,
-                    new_output_path
-                )
-                output_path = new_output_path
-            resolved_config["output"] = output_path
+            resolved_config["output"] = relative_to_config(output_path)
         if "extension" in config:
             resolved_config["extension"] = config["extension"]
     # Merge in the command line arguments
