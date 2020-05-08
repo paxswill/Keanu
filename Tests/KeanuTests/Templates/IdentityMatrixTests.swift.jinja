@@ -1,0 +1,25 @@
+{% extends "base-matrix-scalar.jinja" %}
+
+{% block base_name %}Identity{% endblock %}
+
+{% block test_contents %}
+func testIdentityMatrix0() {
+    let m = TestMatrix.identityMatrix(size: 0)
+    XCTAssert(m.isEmpty)
+}
+
+func testIdentityMatrix1() {
+    let m = TestMatrix.identityMatrix(size: 1)
+    XCTAssertEqual(m.scalar, {{ Scalar }}(exactly: 1))
+}
+
+func testIdentityMatrix() {
+    let matrixSize = 5
+    let m = TestMatrix.identityMatrix(size: matrixSize)
+    for row in 0..<matrixSize {
+        for column in 0..<matrixSize {
+            XCTAssertEqual(m[row, column], row == column ? {{ Scalar }}(exactly: 1) : {{ Scalar }}.zero)
+        }
+    }
+}
+{% endblock %}

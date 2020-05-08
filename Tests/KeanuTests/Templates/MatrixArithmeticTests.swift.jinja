@@ -1,0 +1,49 @@
+{% extends "base-matrix-scalar.jinja" %}
+
+{% block base_name %}MatrixArithmetic{% endblock %}
+
+{% block test_contents %}
+func testMatrixMatrixAddition() {
+    let a = [[1, 2], [3, 4]] as TestMatrix
+    let b = [[5, 6], [7, 8]] as TestMatrix
+    let expected = [[6, 8], [10, 12]] as TestMatrix
+    XCTAssertEqual(a .+ b, expected)
+}
+
+func testMatrixScalarAddition() {
+    let matrix = [[2, 4], [6, 8]] as TestMatrix
+    let scalar = 1 as Element
+    let expected = [[3, 5], [7, 9]] as TestMatrix
+    XCTAssertEqual(matrix .+ scalar, expected)
+    XCTAssertEqual(scalar .+ matrix, expected)
+}
+
+func testMatrixMatrixSubtraction() {
+    let a = [[5, 6], [7, 8]] as TestMatrix
+    let b = [[1, 2], [3, 4]] as TestMatrix
+    let expected = [[4, 4], [4, 4]] as TestMatrix
+    XCTAssertEqual(a .- b, expected)
+}
+
+func testMatrixScalarSubtraction() {
+    let matrix = [[2, 4], [6, 8]] as TestMatrix
+    let scalar = 1 as Element
+    let expected = [[1, 3], [5, 7]] as TestMatrix
+    XCTAssertEqual(matrix .- scalar, expected)
+}
+
+func testMatrixElementMultiplication() {
+    let a = [[1, 3], [5, 7]] as TestMatrix
+    let b = [[2, 4], [6, 8]] as TestMatrix
+    let expected = [[2, 12], [30, 56]] as TestMatrix
+    XCTAssertEqual(a .* b, expected)
+}
+
+func testMatrixScalarMultiplication() {
+    let matrix = [[1, 2], [3, 4]] as TestMatrix
+    let scalar = 2 as Element
+    let expected = [[2, 4], [6, 8]] as TestMatrix
+    XCTAssertEqual(matrix .* scalar, expected)
+    XCTAssertEqual(scalar .* matrix, expected)
+}
+{% endblock %}

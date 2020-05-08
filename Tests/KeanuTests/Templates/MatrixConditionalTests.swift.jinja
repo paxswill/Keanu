@@ -1,0 +1,65 @@
+{% extends "base-matrix.jinja" %}
+
+{% block base_name %}MatrixConditional{% endblock %}
+
+{% block test_contents %}
+func testIsEmpty1D() {
+    let m = [] as TestMatrix
+    XCTAssert(m.isEmpty)
+}
+
+func testIsEmpty2D() {
+    let m = [[]] as TestMatrix
+    XCTAssert(m.isEmpty)
+}
+
+func testIsNotEmpty() {
+    let m = [[1]] as TestMatrix
+    XCTAssertFalse(m.isEmpty)
+}
+
+func testIsEmptySquare() {
+    let m = [[]] as TestMatrix
+    XCTAssert(m.isSquare)
+}
+
+func testIsSquare() {
+    let m = [[1, 2], [3, 4]] as TestMatrix
+    XCTAssert(m.isSquare)
+}
+
+func testIsNotSquare() {
+    let m = [[1], [2]] as TestMatrix
+    XCTAssertFalse(m.isSquare)
+}
+
+func testIsRowVector() {
+    let m = [[1, 2, 3]] as TestMatrix
+    XCTAssert(m.isVector)
+    XCTAssertEqual(m.vector, [1, 2, 3] as [Element])
+}
+
+func testIsColumnVector() {
+    let m = [[1], [2], [3]] as TestMatrix
+    XCTAssert(m.isVector)
+    XCTAssertEqual(m.vector, [1, 2, 3] as [Element])
+}
+
+func testIsNotVector() {
+    let m = [[1, 2], [3, 4]] as TestMatrix
+    XCTAssertFalse(m.isVector)
+    XCTAssertNil(m.vector)
+}
+
+func testIsScalar() {
+    let m = [[1]] as TestMatrix
+    XCTAssert(m.isScalar)
+    XCTAssertEqual(m.scalar, 1 as Element)
+}
+
+func testIsNotScalar() {
+    let m = [[1, 2, 3]] as TestMatrix
+    XCTAssertFalse(m.isScalar)
+    XCTAssertNil(m.scalar)
+}
+{% endblock %}

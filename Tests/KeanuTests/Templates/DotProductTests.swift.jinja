@@ -1,0 +1,82 @@
+{% extends "base-matrix-scalar.jinja" %}
+
+{% block base_name %}DotProduct{% endblock %}
+
+{% block test_contents %}
+func testDotSingle() {
+    let lhs = [[1]] as TestMatrix
+    let rhs = [[10]] as TestMatrix
+    let dot = lhs.dot(rhs)
+    XCTAssertEqual(dot, 10 as Element)
+}
+
+func testDotThree() {
+    let rhs = [[1, 2, 3]] as TestMatrix
+    let lhs = [[4, 5, 6]] as TestMatrix
+    let dot = lhs.dot(rhs)
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testRowColumnVectors() {
+    let lhs = [[1], [2], [3]] as TestMatrix
+    let rhs = [[4, 5, 6]] as TestMatrix
+    let dot = lhs.dot(rhs)
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testRowViewColumn() {
+    let lhs = [[1], [2], [3]] as TestMatrix
+    let rhs = [[4, 5, 6]] as TestMatrix
+    let dot = lhs.dot(rhs.row(0))
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testMatrixArray() {
+    let lhs = [[1], [2], [3]] as TestMatrix
+    let rhs = [4, 5, 6] as [Element]
+    let dot = lhs.dot(rhs)
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testDotSingleRow() {
+    let lhs = [[1]] as TestMatrix
+    let rhs = [[10]] as TestMatrix
+    let dot = lhs.row(0).dot(rhs.row(0))
+    XCTAssertEqual(dot, 10 as Element)
+}
+
+func testDotSingleColumn() {
+    let lhs = [[1]] as TestMatrix
+    let rhs = [[10]] as TestMatrix
+    let dot = lhs.column(0).dot(rhs.column(0))
+    XCTAssertEqual(dot, 10 as Element)
+}
+
+func testDotSingleRowColumn() {
+    let lhs = [[1]] as TestMatrix
+    let rhs = [[10]] as TestMatrix
+    let dot = lhs.row(0).dot(rhs.column(0))
+    XCTAssertEqual(dot, 10 as Element)
+}
+
+func testDotThreeRow() {
+    let rhs = [[1, 2, 3]] as TestMatrix
+    let lhs = [[4, 5, 6]] as TestMatrix
+    let dot = lhs.row(0).dot(rhs.row(0))
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testDotThreeColumn() {
+    let rhs = [[1], [2], [3]] as TestMatrix
+    let lhs = [[4], [5], [6]] as TestMatrix
+    let dot = lhs.column(0).dot(rhs.column(0))
+    XCTAssertEqual(dot, 32 as Element)
+}
+
+func testDotThreeRowColumn() {
+    let lhs = [[1, 2, 3]] as TestMatrix
+    let rhs = [[4], [5], [6]] as TestMatrix
+    let dot = lhs.row(0).dot(rhs.column(0))
+    XCTAssertEqual(dot, 32 as Element)
+}
+{% endblock %}}

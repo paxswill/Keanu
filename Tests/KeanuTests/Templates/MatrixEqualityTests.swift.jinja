@@ -1,0 +1,65 @@
+{% extends "base-matrix-scalar.jinja" %}
+
+{% block base_name %}MatrixEquality{% endblock %}
+
+{% block test_contents %}
+func testEmptyEqual() {
+    let m1 = [[]] as TestMatrix
+    let m2 = [[]] as TestMatrix
+    XCTAssertEqual(m1, m2)
+}
+
+func testSingleEqual() {
+    let m1 = [[1]] as TestMatrix
+    let m2 = [[1]] as TestMatrix
+    XCTAssertEqual(m1, m2)
+}
+
+func testNormalEqual() {
+    let m1 = [[1, 2, 3], [4, 5, 6]] as TestMatrix
+    let m2 = [[1, 2, 3], [4, 5, 6]] as TestMatrix
+    XCTAssertEqual(m1, m2)
+}
+
+func testSameSizeNotEqual() {
+    let m1 = [[1, 2, 3], [4, 5, 6]] as TestMatrix
+    let m2 = [[4, 5, 6], [1, 2, 3]] as TestMatrix
+    XCTAssertNotEqual(m1, m2)
+}
+
+func testSameCountNotEqual() {
+    let m1 = [[1, 2, 3, 4, 5, 6]] as TestMatrix
+    let m2 = [[1, 2, 3], [4, 5, 6]] as TestMatrix
+    XCTAssertNotEqual(m1, m2)
+}
+
+func testDifferentCountNotEqual() {
+    let m1 = [[]] as TestMatrix
+    let m2 = [[1]] as TestMatrix
+    XCTAssertNotEqual(m1, m2)
+}
+
+{% if Matrix.contiguous %}
+func testDifferentOrderEqual() {
+    let m1 = TestMatrix([[1, 2, 3], [4, 5, 6]], order: .rowMajor)
+    let m2 = TestMatrix([[1, 2, 3], [4, 5, 6]], order: .columnMajor)
+    XCTAssertEqual(m1, m2)
+}
+
+func testDifferentOrderNotEqual() {
+    let m1 = TestMatrix([[4, 5, 6], [4, 5, 6]], order: .rowMajor)
+    let m2 = TestMatrix([[1, 2, 3], [4, 5, 6]], order: .columnMajor)
+    XCTAssertNotEqual(m1, m2)
+}
+
+func testTransposedNotEqual() {
+    let m1 = TestMatrix([[1, 2, 3], [4, 5, 6]], sourceOrder: .rowMajor, order: .rowMajor)
+    let m2 = TestMatrix(
+        [[1, 2, 3], [4, 5, 6]],
+        sourceOrder: .columnMajor,
+        order: .columnMajor
+    )
+    XCTAssertNotEqual(m1, m2)
+}
+{% endif %}
+{% endblock %}
