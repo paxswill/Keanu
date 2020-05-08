@@ -7,6 +7,7 @@ import enum
 import functools
 import itertools
 import logging
+import operator
 import pathlib
 import pprint
 import sys
@@ -97,8 +98,9 @@ class SwiftType:
 
     def condition(self):
         predicates = []
-        predicates.extend(map(lambda c: c.swift_condition, self.platforms))
-        predicates.extend(map(lambda c: c.swift_condition, self.archs))
+        swift_getter = operator.attrgetter("swift_condition")
+        predicates.extend(" && ".join(map(swift_getter, self.os)))
+        predicates.extend(" && ".join(map(swift_getter, self.archs)))
         if predicates:
             return " || ".join(predicates)
         else:
