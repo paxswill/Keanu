@@ -261,6 +261,8 @@ def get_config():
     resolved_config.update({ k: v for k, v in vars(args).items() if v})
     log.debug("Resolved configuration:\n%s", pprint.pformat(resolved_config))
     # Sanity checks
+    if not resolved_config["output"].exists():
+        resolved_config["output"].mkdir(parents=True)
     assert resolved_config["output"].is_dir()
     extension = resolved_config["extension"]
     # Jinja takes the extension *without* the dot
